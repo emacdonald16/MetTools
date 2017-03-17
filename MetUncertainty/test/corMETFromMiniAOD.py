@@ -11,21 +11,14 @@ process.load('Configuration.StandardSequences.MagneticField_38T_cff')
 process.load('Configuration.StandardSequences.FrontierConditions_GlobalTag_cff')
 
 # Message Logger settings
-#process.load("FWCore.MessageService.MessageLogger_cfi")#originally not commented out
-#process.MessageLogger.destinations = ['cout', 'cerr']#originally not commented out
-#process.MessageLogger.cerr.FwkReport.reportEvery = 1#originally not commented out
-
-#new stuff
 process.load("FWCore.MessageLogger.MessageLogger_cfi")
-process.MessageLogger.cerr.threshold = 'INFO'
-process.MessageLogger.categories.append('Demo')
-process.MessageLogger.cerr.INFO = cms.untracked.PSet(
-    limit = cms.untracked.int32(-1)
-)
-
-process.MessageLogger.destinations = ['cout', 'cerr']#moved from original place above
-process.MessageLogger.cerr.FwkReport.reportEvery = 1#moved from original place above
-#end new stuff
+#process.MessageLogger.cerr.threshold = 'INFO'
+#process.MessageLogger.categories.append('Demo')
+#process.MessageLogger.cerr.INFO = cms.untracked.PSet(
+#    limit = cms.untracked.int32(-1)
+#)
+#process.MessageLogger.destinations = ['cout', 'cerr']
+process.MessageLogger.cerr.FwkReport.reportEvery = 5000
 
 # Set the process options -- Display summary at the end, enable unscheduled execution
 process.options = cms.untracked.PSet( 
@@ -143,21 +136,11 @@ if redoPuppi:
                              jetFlavor="AK4PFPuppi",
                              postfix="Puppi"
                              )
-#insert random new shit
+
 process.demo = cms.EDAnalyzer('DemoAnalyzer', slimmedMETTag = cms.InputTag("slimmedMETs"), PFMETTag = cms.InputTag("patPFMet"), PFMETT1Tag = cms.InputTag("patPFMetT1"), PFMETResDTag = cms.InputTag("patPFMetT1JetResDown"), PFMETResUTag = cms.InputTag("patPFMetT1JetResUp"), PFMETPuppiTag = cms.InputTag("patPFMetT1Puppi"), PFMETSmearTag = cms.InputTag("patPFMetT1Smear"),PFMETSmearDTag = cms.InputTag("patPFMetT1SmearJetResDown"),PFMETSmearUTag = cms.InputTag("patPFMetT1SmearJetResUp"),
 )
-
-
 process.p = cms.Path(process.demo)
-
 process.TFileService = cms.Service("TFileService", fileName = cms.string("MET.root") )
-#end new random shit
-
-
-
-
-
-
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     compressionLevel = cms.untracked.int32(4),
@@ -184,11 +167,5 @@ process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     fastCloning = cms.untracked.bool(False),
     overrideInputFileSplitLevels = cms.untracked.bool(True)
 )
-
-
-process.MINIAODSIMoutput_step = cms.EndPath(process.MINIAODSIMoutput)
-
-
-#End original
-#Just copying in the other file...
+#process.MINIAODSIMoutput_step = cms.EndPath(process.MINIAODSIMoutput)
 
