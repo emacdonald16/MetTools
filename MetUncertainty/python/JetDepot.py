@@ -9,7 +9,7 @@ def JetDepot(process, JetTag, JetType, jecUncDir=0, doSmear=True, jerUncDir=0):
     ## JEC uncertainty variations
     ## ----------------------------------------------------------------------------------------------
 
-    from TreeMaker.Utils.jetuncertainty_cfi import JetUncertaintyProducer
+    from MetTools.MetUncertainty.jetuncertainty_cfi import JetUncertaintyProducer
 
     if jecUncDir!=0:
         #JEC unc up or down
@@ -26,7 +26,7 @@ def JetDepot(process, JetTag, JetType, jecUncDir=0, doSmear=True, jerUncDir=0):
     ## JER smearing + uncertainty variations
     ## ----------------------------------------------------------------------------------------------
     
-    from TreeMaker.Utils.smearedpatjet_cfi import SmearedPATJetProducer
+    from MetTools.MetUncertainty.smearedpatjet_cfi import SmearedPATJetProducer
     
     if doSmear:
         patSmearedJets = SmearedPATJetProducer.clone(
