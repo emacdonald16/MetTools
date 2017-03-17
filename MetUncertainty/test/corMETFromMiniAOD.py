@@ -1,8 +1,7 @@
 import FWCore.ParameterSet.Config as cms
 
 # Define the CMSSW process
-process = cms.Process("RERUN")
-process = cms.Process("Demo")#added this
+process = cms.Process("Demo")
 
 # Load the standard set of configuration modules
 process.load('Configuration.StandardSequences.Services_cff')
@@ -137,7 +136,25 @@ if redoPuppi:
                              postfix="Puppi"
                              )
 
-process.demo = cms.EDAnalyzer('DemoAnalyzer', slimmedMETTag = cms.InputTag("slimmedMETs"), PFMETTag = cms.InputTag("patPFMet"), PFMETT1Tag = cms.InputTag("patPFMetT1"), PFMETResDTag = cms.InputTag("patPFMetT1JetResDown"), PFMETResUTag = cms.InputTag("patPFMetT1JetResUp"), PFMETPuppiTag = cms.InputTag("patPFMetT1Puppi"), PFMETSmearTag = cms.InputTag("patPFMetT1Smear"),PFMETSmearDTag = cms.InputTag("patPFMetT1SmearJetResDown"),PFMETSmearUTag = cms.InputTag("patPFMetT1SmearJetResUp"),
+from MetTools.MetUncertainty.JetDepot import JetDepot
+
+jetTag = cms.InputTag("slimmedJets")
+process, jetTagJECUp   = JetDepot(process, jetTag, "AK4PFchs", jecUncDir=1,  doSmear=False, jerUncDir=0)
+process, jetTagJECDown = JetDepot(process, jetTag, "AK4PFchs", jecUncDir=-1, doSmear=False, jerUncDir=0)
+
+process.demo = cms.EDAnalyzer('DemoAnalyzer',
+                              jetTag = jetTag,
+                              jetTagJECUp = jetTagJECUp,
+                              jetTagJECDown = jetTagJECDown,
+                              slimmedMETTag = cms.InputTag("slimmedMETs"),
+                              PFMETTag = cms.InputTag("patPFMet"),
+                              PFMETT1Tag = cms.InputTag("patPFMetT1"),
+                              PFMETResDTag = cms.InputTag("patPFMetT1JetResDown"),
+                              PFMETResUTag = cms.InputTag("patPFMetT1JetResUp"),
+                              PFMETPuppiTag = cms.InputTag("patPFMetT1Puppi"),
+                              PFMETSmearTag = cms.InputTag("patPFMetT1Smear"),
+                              PFMETSmearDTag = cms.InputTag("patPFMetT1SmearJetResDown"),
+                              PFMETSmearUTag = cms.InputTag("patPFMetT1SmearJetResUp"),
 )
 process.p = cms.Path(process.demo)
 process.TFileService = cms.Service("TFileService", fileName = cms.string("MET.root") )
