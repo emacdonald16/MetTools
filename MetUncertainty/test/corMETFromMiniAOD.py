@@ -22,12 +22,12 @@ process.MessageLogger.cerr.FwkReport.reportEvery = 5000
 # Set the process options -- Display summary at the end, enable unscheduled execution
 process.options = cms.untracked.PSet( 
     allowUnscheduled = cms.untracked.bool(True),
-    wantSummary = cms.untracked.bool(False)#True in Conf file; don't know what this does 
+    wantSummary = cms.untracked.bool(False)
 )
 
 # How many events to process
-process.maxEvents = cms.untracked.PSet( #( input = cms.untracked.int32(-1) ), in Conf
-   input = cms.untracked.int32(10)
+process.maxEvents = cms.untracked.PSet( #( input = cms.untracked.int32(-1) )
+   input = cms.untracked.int32(5000)
 )
 
 #configurable options =======================================================================
@@ -88,8 +88,13 @@ if usePrivateSQlite:
 process.source = cms.Source("PoolSource", 
     fileNames = cms.untracked.vstring([
         "file:/uscms_data/d3/emacdona/WorkingArea/CMSSW_8_0_24_patch1/src/801F9D94-38F4-E611-A911-0025905B860E.root",
-        "file:/uscms_data/d3/emacdona/WorkingArea/CMSSW_8_0_24_patch1/src/E650E294-38F4-E611-BEEB-0025905B859A.root",
-        ])
+ #       "file:/uscms_data/d3/emacdona/WorkingArea/CMSSW_8_0_24_patch1/src/E650E294-38F4-E611-BEEB-0025905B859A.root",
+#        "file:root://cms-xrd-global.cern.ch//store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1/00000/004A0552-3929-E611-BD44-0025905A48F0.root",
+ #       "file:root://cms-xrd-global.cern.ch//store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1/00000/004E1145-C828-E611-9097-0CC47A4D76AA.root",
+ #       "file:root://cms-xrd-global.cern.ch//store/mc/RunIISpring16MiniAODv2/TT_TuneCUETP8M1_13TeV-powheg-pythia8/MINIAODSIM/PUSpring16_80X_mcRun2_asymptotic_2016_miniAODv2_v0_ext4-v1/00000/005FE7AB-D928-E611-8DE8-0022198C2C85.root",  
+      ])
+
+
 )
 
 
@@ -143,6 +148,8 @@ process, jetTagJECUp   = JetDepot(process, jetTag, "AK4PFchs", jecUncDir=1,  doS
 process, jetTagJECDown = JetDepot(process, jetTag, "AK4PFchs", jecUncDir=-1, doSmear=False, jerUncDir=0)
 
 process.demo = cms.EDAnalyzer('DemoAnalyzer',
+                              packed = cms.InputTag("packedGenParticles"),
+                             # pruned = cms.InputTag("prunedGenParticles"),
                               jetTag = jetTag,
                               jetTagJECUp = jetTagJECUp,
                               jetTagJECDown = jetTagJECDown,
@@ -157,7 +164,7 @@ process.demo = cms.EDAnalyzer('DemoAnalyzer',
                               PFMETSmearUTag = cms.InputTag("patPFMetT1SmearJetResUp"),
 )
 process.p = cms.Path(process.demo)
-process.TFileService = cms.Service("TFileService", fileName = cms.string("MET.root") )
+process.TFileService = cms.Service("TFileService", fileName = cms.string("METsmall.root") )
 
 process.MINIAODSIMoutput = cms.OutputModule("PoolOutputModule",
     compressionLevel = cms.untracked.int32(4),
