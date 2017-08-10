@@ -3,6 +3,7 @@
 <use   name="CommonTools/Utils"/>
 <use   name="CondFormats/Serialization"/>
 <use   name="CondFormats/DataRecord"/>
+<use   name="CondFormats/JetMETObjects"/>
 <use   name="boost_serialization"/>
 <use   name="root"/>
 <use   name="rootmath"/>
